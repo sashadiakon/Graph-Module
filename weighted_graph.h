@@ -11,6 +11,9 @@
 #include <stack>
 #include <climits>
 #include <limits>
+
+using namespace std;
+
 class WeightedGraph {
     public:
         // Adds a node to the graph
@@ -36,6 +39,7 @@ class WeightedGraph {
         void DFS(int startNode);    
         void PrimMST();
         std::vector<int> DijkstraShortestPath(int startNode);
+        std::vector<int> AStarSearch(int start, int goal, std::unordered_map<int, int>& heuristics);
 
 
     private:

@@ -1,4 +1,5 @@
 #include "weighted_graph.h"
+using namespace std;
 
 void WeightedGraph::addNode(int node) {
     adjList[node] = std::vector<std::pair<int, int>>();
@@ -125,4 +126,77 @@ std::vector<int> WeightedGraph::DijkstraShortestPath(int startNode) {
 
     // Return the distances from the start node to all nodes
     return distances;
+}
+
+
+
+
+
+class AStarNode {
+public:
+    int id;
+    int fScore; // f(n) = g(n) + h(n)
+    int gScore; // g(n) - cost to reach this node
+    AStarNode(int id, int gScore, int fScore) : id(id), gScore(gScore), fScore(fScore) {}
+    bool operator<(const AStarNode &other) const {
+        return fScore > other.fScore;
+    }
+};
+
+
+std::vector<int> WeightedGraph::AStarSearch(int start, int goal, std::unordered_map<int, int> &heuristics){
+    // Check if the start and goal nodes exist in the graph
+    if (nodes.find(start) == nodes.end() || nodes.find(goal) == nodes.end()) {
+        cerr << "Error: start or goal node not found in graph." << endl;
+        return {};
+    }
+
+    // Initialize priority queue and closed set
+    priority_queue<AStarNode> pq;
+    unordered_set<int> closedSet;
+
+    // Initialize the start node
+    pq.push(AStarNode(start, 0, heuristics[start]));
+    unordered_map<int, int> gScores = {{start, 0}};
+
+    // Keep track of the parent node of each node in the optimal path
+    unordered_map<int, int> parents;
+
+    while (!pq.empty()) {
+        // Get the node with the lowest f(n) score
+        AStarNode curr = pq.top();
+        pq.pop();
+
+        // Check if we have reached the goal
+        if (curr.id == goal) {
+            vector<int> path = {curr.id};
+            while (parents.find(path.front()) != parents.end()) {
+                path.insert(path.begin(), parents[path.front()]);
+            }
+            return path;
+        }
+
+        // Add the current node to the closed set
+        closedSet.insert(curr.id);
+
+        // Explore neighbors of the current node
+        for (auto &edge : adjList[curr.id]) {
+            int neighbor = edge.first;
+            if (closedSet.find(neighbor) != closedSet.end()) {
+                continue; // Ignore neighbors that have already been evaluated
+            }
+
+            int tentativeGScore = gScores[curr.id] + edge.second;
+            if (gScores.find(neighbor) == gScores.end() || tentativeGScore < gScores[neighbor]) {
+                // This path to the neighbor is better than any previous one. Record it.
+                parents[neighbor] = curr.id;
+                gScores[neighbor] = tentativeGScore;
+                int fScore = tentativeGScore + heuristics[neighbor];
+                pq.push(AStarNode(neighbor, tentativeGScore, fScore));
+            }
+        }
+    }
+
+    cerr << "Error: no path found from start to goal." << endl;
+    return {};
 }

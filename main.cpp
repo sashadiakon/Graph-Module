@@ -8,10 +8,17 @@ int main() {
     graph.addNode(2);
     graph.addNode(3);
     graph.addNode(4);
+    graph.addNode(5);
+    
     graph.addEdge(1, 2, 10);
-    graph.addEdge(2, 3, 20);
-    graph.addEdge(1, 3, 30);
-    graph.addEdge(1, 4, 20);
+    graph.addEdge(1, 3, 15);
+    graph.addEdge(1, 4, 8);
+    graph.addEdge(2, 4, 25);
+    graph.addEdge(2, 3, 10);
+    graph.addEdge(3, 5, 13);
+    graph.addEdge(3, 4, 9);
+    graph.addEdge(4, 5, 11);
+        
 
 
     graph.print();
@@ -26,6 +33,9 @@ int main() {
 
     std::cout<<"\nDijkstra Shortest Path:\n";
     graph.DijkstraShortestPath(2);
+
+    // graph.AStarSearch(1, 4, );
+
 
     return 0;
 }
