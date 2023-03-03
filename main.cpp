@@ -9,11 +9,9 @@ int main() {
 
     graph.print();
     std::cout<<"\nBFS:\n";
-    graph.BFS(2);
-
+    vector<int> a = graph.BFS(2);
     std::cout<<"\nDFS:\n";
-    graph.DFS(1);
-
+    vector<int> b = graph.DFS(1);
     std::cout<<"\nPrimMST:\n";
     graph.PrimMST();
 

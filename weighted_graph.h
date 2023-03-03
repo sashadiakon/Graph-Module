@@ -12,6 +12,7 @@
 #include <climits>
 #include <limits>
 #include <fstream>
+
 using namespace std;
 
 class WeightedGraph {
@@ -38,8 +39,8 @@ class WeightedGraph {
         void print();
         
         // BFS
-        void BFS(int node);
-        void DFS(int startNode);    
+        vector<int> BFS(int node);
+        vector<int> DFS(int startNode);    
         void PrimMST();
         std::vector<int> DijkstraShortestPath(int startNode);
         std::vector<int> AStarSearch(int start, int goal, std::unordered_map<int, int>& heuristics);

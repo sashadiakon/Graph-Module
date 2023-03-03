@@ -43,8 +43,9 @@ void WeightedGraph::print() {
     }
 }
 
-void WeightedGraph::BFS(int start) {
+vector<int> WeightedGraph::BFS(int start) {
     std::unordered_map<int, bool> visited;
+    vector<int> path;
     for (const auto &node : adjList) {
         visited[node.first] = false;
     }
@@ -58,6 +59,7 @@ void WeightedGraph::BFS(int start) {
         q.pop();
 
         std::cout << node << " ";
+        path.push_back(node);
 
         for (const auto &neighbor : adjList[node]) {
           if (!visited[neighbor.first]) {
@@ -66,11 +68,13 @@ void WeightedGraph::BFS(int start) {
           }
         }
     }
+    return path;
 }
 
-void WeightedGraph::DFS(int startNode) {
+vector<int> WeightedGraph::DFS(int startNode) {
     std::stack<int> stack;
     std::unordered_map<int, bool> visited;
+    vector<int> path;
     for (auto &node : adjList) {
 
         visited[node.first] = false;
@@ -82,12 +86,14 @@ void WeightedGraph::DFS(int startNode) {
         if (!visited[node]) {
         visited[node] = true;
         std::cout << node << " ";
+        path.push_back(node);
         for (auto &neighbor : adjList[node]) {
             stack.push(neighbor.first);
         }
         }
     }
     std::cout << std::endl;
+    return path;
 }
 
 void WeightedGraph::PrimMST() {
