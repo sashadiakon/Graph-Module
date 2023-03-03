@@ -11,11 +11,14 @@
 #include <stack>
 #include <climits>
 #include <limits>
-
+#include <fstream>
 using namespace std;
 
 class WeightedGraph {
     public:
+        // Initialize graph from file
+        void readFromFile(const std::string& fileName);
+
         // Adds a node to the graph
         void addNode(int node);
 
@@ -52,4 +55,3 @@ class WeightedGraph {
 
 #endif // WEIGHTED_GRAPH_H
 
-// create UnWeightedGraph class which is inheritance of WeightedGraph

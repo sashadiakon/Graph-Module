@@ -1,6 +1,29 @@
 #include "weighted_graph.h"
 using namespace std;
 
+void WeightedGraph::readFromFile(const std::string& fileName) {
+    std::ifstream inFile(fileName);
+    if (!inFile) {
+        std::cerr << "Error: Failed to open file " << fileName << std::endl;
+        return;
+    }
+
+    int numNodes, numEdges;
+    inFile >> numNodes >> numEdges;
+
+    for (int i = 0; i < numNodes; ++i) {
+        addNode(i);
+    }
+
+    for (int i = 0; i < numEdges; ++i) {
+        int source, dest, weight;
+        inFile >> source >> dest >> weight;
+        addEdge(source, dest, weight);
+    }
+
+    inFile.close();
+}
+
 void WeightedGraph::addNode(int node) {
     adjList[node] = std::vector<std::pair<int, int>>();
 }
@@ -94,6 +117,7 @@ void WeightedGraph::PrimMST() {
         std::cout << parent[i] << " - " << i << std::endl;
     }
 }
+
 std::vector<int> WeightedGraph::DijkstraShortestPath(int startNode) {
     // Initialize distances from start node to all nodes as infinity
     std::vector<int> distances(numNodes, std::numeric_limits<int>::max());
