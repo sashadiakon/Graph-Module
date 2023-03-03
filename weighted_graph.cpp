@@ -1,6 +1,18 @@
 #include "weighted_graph.h"
 using namespace std;
 
+
+void WeightedGraph::addNode(int node) {
+    adjList[node] = std::vector<std::pair<int, int>>();
+    numNodes ++;
+}
+
+void WeightedGraph::addEdge(int node1, int node2, int weight) {
+    adjList[node1].push_back({node2, weight});
+    adjList[node2].push_back({node1, weight});
+}
+
+
 void WeightedGraph::readFromFile(const std::string& fileName) {
     std::ifstream inFile(fileName);
     if (!inFile) {
@@ -8,11 +20,12 @@ void WeightedGraph::readFromFile(const std::string& fileName) {
         return;
     }
 
-    int numNodes, numEdges;
+    int numEdges;
     inFile >> numNodes >> numEdges;
 
     for (int i = 0; i < numNodes; ++i) {
         addNode(i);
+        numNodes --; // as we add 1 in addNote method
     }
 
     for (int i = 0; i < numEdges; ++i) {
@@ -24,14 +37,7 @@ void WeightedGraph::readFromFile(const std::string& fileName) {
     inFile.close();
 }
 
-void WeightedGraph::addNode(int node) {
-    adjList[node] = std::vector<std::pair<int, int>>();
-}
 
-void WeightedGraph::addEdge(int node1, int node2, int weight) {
-    adjList[node1].push_back({node2, weight});
-    adjList[node2].push_back({node1, weight});
-}
 
 void WeightedGraph::print() {
     for (const auto &node : adjList) {
@@ -96,8 +102,7 @@ vector<int> WeightedGraph::DFS(int startNode) {
     return path;
 }
 
-void WeightedGraph::PrimMST() {
-    numNodes = 3;
+vector<int> WeightedGraph::PrimMST() {
     std::vector<int> key(numNodes, INT_MAX);
     std::vector<int> parent(numNodes, -1);
     std::vector<bool> inMST(numNodes, false);
@@ -110,18 +115,20 @@ void WeightedGraph::PrimMST() {
         pq.pop();
         inMST[u] = true;
         for (auto &neighbor : adjList[u]) {
-        int v = neighbor.first;
-        int weight = neighbor.second;
-        if (!inMST[v] && key[v] > weight) {
-            key[v] = weight;
-            pq.push({key[v], v});
-            parent[v] = u;
-        }
+            int v = neighbor.first;
+            int weight = neighbor.second;
+            if (!inMST[v] && key[v] > weight) {
+                key[v] = weight;
+                pq.push({key[v], v});
+                parent[v] = u;
+            }
         }
     }
+
     for (int i = 1; i < numNodes; i++) {
-        std::cout << parent[i] << " - " << i << std::endl;
+        std::cout << parent[i] << " -> " << i << std::endl;
     }
+    return parent;
 }
 
 std::vector<int> WeightedGraph::DijkstraShortestPath(int startNode) {

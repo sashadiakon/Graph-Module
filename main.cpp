@@ -13,7 +13,7 @@ int main() {
     std::cout<<"\nDFS:\n";
     vector<int> b = graph.DFS(1);
     std::cout<<"\nPrimMST:\n";
-    graph.PrimMST();
+    vector<int> c = graph.PrimMST();
 
     std::cout<<"\nDijkstra Shortest Path:\n";
     graph.DijkstraShortestPath(2);
