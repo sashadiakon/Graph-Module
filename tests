@@ -1,0 +1,70 @@
+
+pair<int, vector<std::vector<int>>> WeightedGraph::FordFulkerson(int source, int sink) {
+    int maxFlow = 0;
+    vector<int> parent(numNodes, -1);
+    // create residual graph and initialize it
+    std::vector<std::vector<int>> residualGraph(numNodes, std::vector<int>(numNodes, 0));
+    for (int i = 0; i < numNodes; i++) {
+        for (auto neighbor : adjList[i]) {
+            residualGraph[i][neighbor.first] += neighbor.second;
+        }
+    }
+
+    // repeatedly find augmenting paths and update the flow until no more augmenting paths exist
+    while (true) {
+        // find an augmenting path using DFS
+        std::vector<bool> visited(numNodes, false);
+        int flow = dfsFordFulkerson(source, sink, INT_MAX, parent, residualGraph);
+
+        // if no more augmenting paths exist, break
+        if (flow == 0) {
+            break;
+        }
+
+        // update the flow and residual graph
+        maxFlow += flow;
+        for (int v = sink; v != source; v = parent[v]) {
+            int u = parent[v];
+            residualGraph[u][v] -= flow;
+            residualGraph[v][u] += flow;
+        }
+    }
+
+    return make_pair(maxFlow, residualGraph);
+}
+
+int dfsFordFulkerson(int u, int t, int flow, vector<int>& parent, vector<vector<int>>& residualGraph) {
+    parent[u] = t; // set the parent of u to t
+
+    int pathFlow = 0;
+
+    // Base case: if we reach the sink node, return the current flow
+    if (u == t) {
+        return flow;
+    }
+
+    // For each neighbor v of u in the residual graph
+    for (int v = 0; v < residualGraph.size(); v++) {
+        if (residualGraph[u][v] > 0 && parent[v] == -1) {
+            // Compute the minimum flow in the path
+            int minPathFlow = dfsFordFulkerson(v, t, min(flow, residualGraph[u][v]), parent, residualGraph);
+            if (minPathFlow > 0) {
+                // Update the residual capacities of the edges
+                residualGraph[u][v] -= minPathFlow;
+                residualGraph[v][u] += minPathFlow;
+
+                // Update the path flow
+                pathFlow += minPathFlow;
+
+                // Update the flow variable
+                flow -= minPathFlow;
+
+                if (flow == 0) {
+                    break;
+                }
+            }
+        }
+    }
+
+    return pathFlow;
+}

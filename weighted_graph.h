@@ -17,23 +17,24 @@ using namespace std;
 
 class WeightedGraph {
     public:
+    
         // Initialize graph from file
-        void readFromFile(const std::string& fileName);
+        void readFromFile(const string& fileName, bool directed);
 
         // Adds a node to the graph
         void addNode(int node);
 
         // Adds an edge between two nodes with a weight
-        void addEdge(int node1, int node2, int weight);
+        void addEdge(int node1, int node2, int weight, bool directed);
 
         // Returns the weight of the edge between two nodes
         int getWeight(int node1, int node2);
 
         // Returns all the nodes in the graph
-        std::vector<int> getNodes();
+        vector<int> getNodes();
 
         // Returns all the edges and their weights for a given node
-        std::map<int, int> getEdges(int node);
+        map<int, int> getEdges(int node);
 
         // Prints the graph
         void print();
@@ -42,15 +43,18 @@ class WeightedGraph {
         vector<int> BFS(int node);
         vector<int> DFS(int startNode);    
         vector<int> PrimMST();
-        std::vector<int> DijkstraShortestPath(int startNode);
-        std::vector<int> AStarSearch(int start, int goal, std::unordered_map<int, int>& heuristics);
+        vector<int> DijkstraShortestPath(int startNode);
+        vector<int> AStarSearch(int start, int goal, unordered_map<int, int>& heuristics);
+        pair<int, vector<vector<int>>> FordFulkerson(int source, int sink);
 
 
     private:
-        std::unordered_set<int> nodes;
-        std::unordered_map<int, std::map<int, int>> edges;
-        std::unordered_map<int, std::vector<std::pair<int, int>>> adjList;
-        int numNodes;
+        unordered_set<int> nodes;
+        unordered_map<int, map<int, int>> edges;
+        unordered_map<int, vector<pair<int, int>>> adjList;
+        int dfsFordFulkerson(int u, int t, int flow, vector<int>& parent, vector<vector<int>>& residualGraph);
+        int numNodes;        
+
 
 };
 
