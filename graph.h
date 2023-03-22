@@ -54,7 +54,7 @@ class WeightedGraph {
         vector<int> BFS(int node);
         vector<int> DFS(int startNode);    
         vector<int> PrimMST();
-        vector<int> DijkstraShortestPath(int startNode);
+        vector<vector<int>> DijkstraShortestPath(int startNode);
         vector<int> AStarSearch(int start, int goal, unordered_map<int, int>& heuristics);
         // pair<int, vector<vector<int>>> FordFulkerson(int source, int sink);
 

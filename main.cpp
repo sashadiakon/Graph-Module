@@ -17,9 +17,12 @@ int main() {
     vector<int> c = graph.PrimMST();
 
     cout<<"\nDijkstra Shortest Path:\n";
-    vector<int> d = graph.DijkstraShortestPath(2);
+    vector<vector<int>> d = graph.DijkstraShortestPath(2);
     for (auto node: d){
-        cout<<node<<" ";
+        for (auto nd: node){
+            cout<<nd<<" ";
+        }
+        cout<<"\n";
     }
 
     cout<<"\nA* Alg:\n";

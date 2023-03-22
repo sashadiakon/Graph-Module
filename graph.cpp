@@ -167,10 +167,11 @@ vector<int> WeightedGraph::PrimMST() {
     return parent;
 }
 
-vector<int> WeightedGraph::DijkstraShortestPath(int startNode) {
+vector<vector<int>> WeightedGraph::DijkstraShortestPath(int startNode) {
     // Initialize distances from start node to all nodes as infinity
     vector<int> distances(numNodes, numeric_limits<int>::max());
-    // Initialize start node distance as 0
+    // Initialize list of paths
+    vector<vector<int>> paths(numNodes, vector<int>{startNode});    
     distances[startNode] = 0;
 
     // Priority queue to keep track of nodes with shortest distance
@@ -191,14 +192,21 @@ vector<int> WeightedGraph::DijkstraShortestPath(int startNode) {
             if (distances[currNode] + edgeWeight < distances[adjNode]) {
                 // Update distance to the adjacent node
                 distances[adjNode] = distances[currNode] + edgeWeight;
+                // Update paths
+                paths[adjNode] = paths[currNode];
+                paths[adjNode].push_back(adjNode);
                 // Add the adjacent node to the queue
                 pq.push(make_pair(distances[adjNode], adjNode));
             }
         }
     }
 
-    // Return the distances from the start node to all nodes
-    return distances;
+    // vector<pair<int, vector<int>>> result(numNodes);
+    // for (int i = 0; i < numNodes; i++) {
+    //     result[i].first = distances[i];
+    //     result[i].second = paths[i];
+    // }
+    return paths;
 }
 
 
