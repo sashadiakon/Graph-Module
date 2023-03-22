@@ -9,7 +9,9 @@ int main() {
 
     cout<<"\nBFS:\n";
     vector<int> a = graph.BFS(2);
-
+    for (int i: a){
+        cout<<i<<" ";
+    }
     cout<<"\nDFS:\n";
     vector<int> b = graph.DFS(1);
 
