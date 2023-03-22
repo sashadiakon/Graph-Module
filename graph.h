@@ -38,14 +38,14 @@ class WeightedGraph {
         void addEdge(int node1, int node2, int weight, bool directed);
 
         // Returns the weight of the edge between two nodes
-        // int getWeight(int node1, int node2);
-
+        int getWeight(int node1, int node2);
+        unordered_map<int, vector<pair<int, int>>> getGraph();
         int  getNumNodes();
         // Returns all the nodes in the graph
-        vector<int> getNodes();
+        unordered_set<int> getNodes();
 
         // Returns all the edges and their weights for a given node
-        // map<int, int> getEdges(int node);
+        vector<pair<int, int>> getEdges(int node);
 
         // Prints the graph
         void print();
@@ -61,7 +61,6 @@ class WeightedGraph {
 
     private:
         unordered_set<int> nodes;
-        unordered_map<int, map<int, int>> edges;
         unordered_map<int, vector<pair<int, int>>> adjList;
         int dfsFordFulkerson(int u, int t, int flow, vector<int>& parent, vector<vector<int>>& residualGraph);
         int numNodes;        

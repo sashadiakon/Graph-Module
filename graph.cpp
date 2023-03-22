@@ -15,6 +15,32 @@ int WeightedGraph::getNumNodes()  {
     return numNodes;
 }
 
+unordered_map<int, vector<pair<int, int>>> WeightedGraph::getGraph(){
+    return adjList;
+}
+
+vector<pair<int, int>> WeightedGraph::getEdges(int node){
+    return adjList[node];
+ }
+
+ unordered_set<int> WeightedGraph::getNodes(){
+    return nodes;
+ }
+
+int WeightedGraph::getWeight(int node1, int node2){
+    int weight = -1; // initialize with -1 as a default value indicating no edge exists between u and v
+    for (const auto& edge : adjList[node1]) {
+        if (edge.first == node2) {
+            weight = edge.second; // found the edge, set weight to its value
+            return weight;
+        }
+    return weight;
+    }
+}
+
+
+
+
 void WeightedGraph::addEdge(int node1, int node2, int weight, bool directed = false) {
     adjList[node1].push_back({node2, weight});
     if (!directed){

@@ -13,9 +13,10 @@ PYBIND11_MODULE(mygraph, m) {
         .def("add_node", &WeightedGraph::addNode)
         .def("add_edge", &WeightedGraph::addEdge)
         .def("read_from_file", &WeightedGraph::readFromFile)
-        // .def("get_weight", &WeightedGraph::getWeight)
-        // .def("get_nodes", &WeightedGraph::getNodes)
-        // .def("get_edges", &WeightedGraph::getEdges)
+        .def("get_graph", &WeightedGraph::getGraph)
+        .def("get_weight", &WeightedGraph::getWeight)
+        .def("get_nodes", &WeightedGraph::getNodes)
+        .def("get_edges", &WeightedGraph::getEdges)
         .def("print", &WeightedGraph::print)    
 
         .def("bfs", &WeightedGraph::BFS)
