@@ -1,6 +1,5 @@
-// weighted_graph.h
-#ifndef WEIGHTED_GRAPH_H
-#define WEIGHTED_GRAPH_H
+#ifndef GRAPH_H
+#define GRAPH_H
 
 #include <iostream>
 #include <vector>
@@ -15,11 +14,22 @@
 
 using namespace std;
 
+
+class AStarNode {
+public:
+    int id;
+    int fScore; // f(n) = g(n) + h(n)
+    int gScore; // g(n) - cost to reach this node
+    AStarNode(int id, int gScore, int fScore);
+    bool operator<(const AStarNode &other) const;
+};
+
+
 class WeightedGraph {
     public:
-    
+        WeightedGraph();
         // Initialize graph from file
-        void readFromFile(const string& fileName, bool directed);
+        void readFromFile(string fileName, bool directed);
 
         // Adds a node to the graph
         void addNode(int node);
@@ -28,13 +38,14 @@ class WeightedGraph {
         void addEdge(int node1, int node2, int weight, bool directed);
 
         // Returns the weight of the edge between two nodes
-        int getWeight(int node1, int node2);
+        // int getWeight(int node1, int node2);
 
+        int  getNumNodes();
         // Returns all the nodes in the graph
         vector<int> getNodes();
 
         // Returns all the edges and their weights for a given node
-        map<int, int> getEdges(int node);
+        // map<int, int> getEdges(int node);
 
         // Prints the graph
         void print();
@@ -45,7 +56,7 @@ class WeightedGraph {
         vector<int> PrimMST();
         vector<int> DijkstraShortestPath(int startNode);
         vector<int> AStarSearch(int start, int goal, unordered_map<int, int>& heuristics);
-        pair<int, vector<vector<int>>> FordFulkerson(int source, int sink);
+        // pair<int, vector<vector<int>>> FordFulkerson(int source, int sink);
 
 
     private:
@@ -57,6 +68,9 @@ class WeightedGraph {
 
 
 };
+
+
+
 
 #endif // WEIGHTED_GRAPH_H
 

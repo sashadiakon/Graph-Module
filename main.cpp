@@ -1,5 +1,4 @@
-#include <iostream>
-#include "weighted_graph.h"
+#include "graph.h"
 
 int main() {
     WeightedGraph graph;
@@ -39,8 +38,8 @@ int main() {
         cout<<node<<" ";
     }
     cout<<"\nFordFulkerson alg:\n";
-    auto k = graph.FordFulkerson(0, 7);
-    cout<<k.first<<"\n";
+    // auto k = graph.FordFulkerson(0, 7);
+    // cout<<k.first<<"\n";
     // for (auto s : k.second){
     //     for (int a: s){
     //         cout<<a<<" ";

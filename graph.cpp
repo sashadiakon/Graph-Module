@@ -1,11 +1,18 @@
-#include "weighted_graph.h"
+#include "graph.h"
 using namespace std;
 
+WeightedGraph::WeightedGraph() {
+    numNodes = 0;
+}
 
 void WeightedGraph::addNode(int node) {
     adjList[node] = vector<pair<int, int>>();
     nodes.insert(node);
     numNodes ++;
+}
+
+int WeightedGraph::getNumNodes()  {
+    return numNodes;
 }
 
 void WeightedGraph::addEdge(int node1, int node2, int weight, bool directed = false) {
@@ -16,7 +23,7 @@ void WeightedGraph::addEdge(int node1, int node2, int weight, bool directed = fa
     }
 
 
-void WeightedGraph::readFromFile(const string& fileName, bool directed = false) {
+void WeightedGraph::readFromFile(string fileName, bool directed = false) {
     ifstream inFile(fileName);
     if (!inFile) {
         cerr << "Error: Failed to open file " << fileName << endl;
@@ -172,16 +179,13 @@ vector<int> WeightedGraph::DijkstraShortestPath(int startNode) {
 
 
 
-class AStarNode {
-public:
-    int id;
-    int fScore; // f(n) = g(n) + h(n)
-    int gScore; // g(n) - cost to reach this node
-    AStarNode(int id, int gScore, int fScore) : id(id), gScore(gScore), fScore(fScore) {}
-    bool operator<(const AStarNode &other) const {
-        return fScore > other.fScore;
-    }
-};
+AStarNode::AStarNode(int id, int gScore, int fScore)
+    : id(id), gScore(gScore), fScore(fScore) {}
+
+bool AStarNode::operator<(const AStarNode &other) const {
+    return fScore > other.fScore;
+}
+
 
 
 vector<int> WeightedGraph::AStarSearch(int start, int goal, unordered_map<int, int> &heuristics){
@@ -241,74 +245,74 @@ vector<int> WeightedGraph::AStarSearch(int start, int goal, unordered_map<int, i
     return {};
 }
 
-pair<int, vector<vector<int>>> WeightedGraph::FordFulkerson(int source, int sink) {
-    cout<<"1111";
-    return make_pair(0, vector<vector<int>>{});
-    int maxFlow = 0;
-    vector<int> parent(numNodes, -1);
-    // create residual graph and initialize it
-    vector<vector<int>> residualGraph(numNodes, vector<int>(numNodes, 0));
-    for (int i = 0; i < numNodes; i++) {
-        for (auto neighbor : adjList[i]) {
-            residualGraph[i][neighbor.first] += neighbor.second;
-        }
-    }
-    cout<<111;
-    // repeatedly find augmenting paths and update the flow until no more augmenting paths exist
-    while (true) {
-        // find an augmenting path using DFS
-        vector<bool> visited(numNodes, false);
-        int flow = dfsFordFulkerson(source, sink, INT_MAX, parent, residualGraph);
-        // if no more augmenting paths exist, break
-        if (flow == 0) {
-            break;
-        }
-        // update the flow and residual graph
-        maxFlow += flow;
-        for (int v = sink; v != source; v = parent[v]) {
-            int u = parent[v];
-            residualGraph[u][v] -= flow;
-            residualGraph[v][u] += flow;
-        }
-        break;
-    }
+// pair<int, vector<vector<int>>> WeightedGraph::FordFulkerson(int source, int sink) {
+//     cout<<"1111";
+//     return make_pair(0, vector<vector<int>>{});
+//     int maxFlow = 0;
+//     vector<int> parent(numNodes, -1);
+//     // create residual graph and initialize it
+//     vector<vector<int>> residualGraph(numNodes, vector<int>(numNodes, 0));
+//     for (int i = 0; i < numNodes; i++) {
+//         for (auto neighbor : adjList[i]) {
+//             residualGraph[i][neighbor.first] += neighbor.second;
+//         }
+//     }
+//     cout<<111;
+//     // repeatedly find augmenting paths and update the flow until no more augmenting paths exist
+//     while (true) {
+//         // find an augmenting path using DFS
+//         vector<bool> visited(numNodes, false);
+//         int flow = dfsFordFulkerson(source, sink, INT_MAX, parent, residualGraph);
+//         // if no more augmenting paths exist, break
+//         if (flow == 0) {
+//             break;
+//         }
+//         // update the flow and residual graph
+//         maxFlow += flow;
+//         for (int v = sink; v != source; v = parent[v]) {
+//             int u = parent[v];
+//             residualGraph[u][v] -= flow;
+//             residualGraph[v][u] += flow;
+//         }
+//         break;
+//     }
 
-    return make_pair(maxFlow, residualGraph);
-}
+//     return make_pair(maxFlow, residualGraph);
+// }
 
-int WeightedGraph::dfsFordFulkerson(int u, int t, int flow, vector<int>& parent, vector<vector<int>>& residualGraph) {
-    parent[u] = t; // set the parent of u to t
+// int WeightedGraph::dfsFordFulkerson(int u, int t, int flow, vector<int>& parent, vector<vector<int>>& residualGraph) {
+//     parent[u] = t; // set the parent of u to t
 
-    int pathFlow = 0;
-    cout<<8;
-    // Base case: if we reach the sink node, return the current flow
-    if (u == t) {
-        cout<<2;
+//     int pathFlow = 0;
+//     cout<<8;
+//     // Base case: if we reach the sink node, return the current flow
+//     if (u == t) {
+//         cout<<2;
 
-        return flow;
-    }
+//         return flow;
+//     }
 
-    // For each neighbor v of u in the residual graph
-    for (int v = 0; v < residualGraph.size(); v++) {
-        if (residualGraph[u][v] > 0 && parent[v] == -1) {
-            // Compute the minimum flow in the path
-            int minPathFlow = dfsFordFulkerson(v, t, min(flow, residualGraph[u][v]), parent, residualGraph);
-            if (minPathFlow > 0) {
-                // Update the residual capacities of the edges
-                residualGraph[u][v] -= minPathFlow;
-                residualGraph[v][u] += minPathFlow;
+//     // For each neighbor v of u in the residual graph
+//     for (int v = 0; v < residualGraph.size(); v++) {
+//         if (residualGraph[u][v] > 0 && parent[v] == -1) {
+//             // Compute the minimum flow in the path
+//             int minPathFlow = dfsFordFulkerson(v, t, min(flow, residualGraph[u][v]), parent, residualGraph);
+//             if (minPathFlow > 0) {
+//                 // Update the residual capacities of the edges
+//                 residualGraph[u][v] -= minPathFlow;
+//                 residualGraph[v][u] += minPathFlow;
 
-                // Update the path flow
-                pathFlow += minPathFlow;
+//                 // Update the path flow
+//                 pathFlow += minPathFlow;
 
-                // Update the flow variable
-                flow -= minPathFlow;
+//                 // Update the flow variable
+//                 flow -= minPathFlow;
 
-                if (flow <= 0) {
-                    break;
-                }
-            }
-        }
-    }
-    return pathFlow;
-}
+//                 if (flow <= 0) {
+//                     break;
+//                 }
+//             }
+//         }
+//     }
+//     return pathFlow;
+// }
